@@ -1,27 +1,23 @@
-const express = require("express")
-const bookRoutes = require("./routes/books.js")
-const cookieParser = require("cookie-parser")
-const sessionMid = require("express-session")
+const express = require('express')
+const ejs = require('ejs')
+const path = require('path')
+const sessions = require('express-session')
+const routeMain = require('./Route/index.js') 
+
 const app = express()
 
+//view engine
+app.set('view engine', 'ejs')
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser())
-app.use(sessionMid({
-    secret: "SDFSDFLKFFKFKFFKDSDFDF",
-    resave: false,
-    saveUninitialized: false,
-}))
-app.use(logger)
-app.use(bookRoutes)
+//static files
+app.set('views', path.join(__dirname, 'views'))
 
-function logger(req,res,next) { 
-    console.log(`${req.method} : ${req.url}`)
-    next()
-}
+app.use(express.static('public', ))
+app.use(routeMain)
 
-app.listen(3000, (err) => {
-    if (err) console.log(err)
-    console.log(`Server is running`)
+
+
+
+app.listen(3000, ()=>{
+    console.log('server is running')
 })
